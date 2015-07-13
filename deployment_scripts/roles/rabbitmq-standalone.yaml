@@ -3,6 +3,6 @@ meta:
   has_primary: false
   name: 'RabbitMQ'
 name: rabbitmq-standalone
-volumes_role_mapping:
+volumes_roles_mapping:
   - allocate_size: min
     id: os
