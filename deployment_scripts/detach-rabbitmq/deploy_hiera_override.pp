@@ -23,8 +23,7 @@ case hiera('role', 'none') {
 
 $amqp_nodes = nodes_with_roles($nodes_hash, ['rabbitmq-standalone'],
                               'internal_address')
-$amqp_hosts = inline_template("<%= @amqp_nodes.map {|x| x + ':' + @amqp_port}.j
-oin ',' %>")
+$amqp_hosts = inline_template("<%= @amqp_nodes.map {|x| x + ':' + @amqp_port}.join ',' %>")
 
 
 $calculated_content = inline_template('
