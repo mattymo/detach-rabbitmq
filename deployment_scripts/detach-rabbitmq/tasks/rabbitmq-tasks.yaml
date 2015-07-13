@@ -3,7 +3,7 @@
 - id: rabbitmq-standalone
   type: group
   role: [rabbitmq-standalone]
-  requires: [deploy_start, primary-db, primary-controller, controller]
+  requires: [deploy_start]
   required_for: [deploy_end]
   tasks: [fuel_pkgs, hiera, globals, tools, logging, netconfig,
     hosts, firewall, deploy_start, cluster, task-rabbitmq]
@@ -16,7 +16,7 @@
   type: puppet
   role: [rabbitmq-standalone]
   requires: [hosts, firewall]
-  required_for: [deploy_end, openstack-controller, glance]
+  required_for: [deploy_end, glance, primary-controller, controller]
   parameters:
     puppet_manifest: /etc/puppet/modules/osnailyfacter/modular/rabbitmq/rabbitmq.pp
     puppet_modules: /etc/puppet/modules
