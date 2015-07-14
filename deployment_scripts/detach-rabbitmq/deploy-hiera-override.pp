@@ -44,12 +44,3 @@ file { '/etc/hiera/override/plugins.yaml':
   ensure  => file,
   content => "${yaml_additional_config}\n${calculated_content}\n",
 }
-
-package { 'ruby-deep-merge':
-  ensure  => 'installed',
-}
-
-file_line { 'hiera.yaml':
-  path => '/etc/hiera.yaml',
-  line => ':merge_behavior: deeper',
-}
