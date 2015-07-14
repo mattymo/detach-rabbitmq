@@ -1,4 +1,4 @@
-notice('MODULAR: detach-rabbitmq/deploy_hiera_override.pp')
+notice('MODULAR: detach-rabbitmq/deploy-hiera_override.pp')
 
 $detach_rabbitmq_plugin = hiera('detach-rabbitmq')
 #lint:ignore:80chars

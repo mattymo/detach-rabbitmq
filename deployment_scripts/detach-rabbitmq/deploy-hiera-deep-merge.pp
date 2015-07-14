@@ -1,4 +1,4 @@
-notice('MODULAR: detach-rabbitmq/deploy_hiera_deep_merge.pp')
+notice('MODULAR: detach-rabbitmq/deploy-hiera-deep-merge.pp')
 
 # This must be configured before we try and do our overrides, or sadness will
 # ensue.
