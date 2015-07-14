@@ -30,6 +30,7 @@ $calculated_content = inline_template('
 amqp_hosts: <%= @amqp_hosts %>
 rabbit:
   enabled: <%= @rabbit_enabled %>
+  pacemaker: false
 ')
 
 ###################
