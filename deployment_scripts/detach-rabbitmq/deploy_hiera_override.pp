@@ -12,12 +12,15 @@ $settings_hash = parseyaml($yaml_additional_config)
 case hiera('role', 'none') {
   /rabbitmq/: {
     $rabbit_enabled = true
+    $pacemaker_enabled = false
   }
   /controller/: {
     $rabbit_enabled = false
+    $pacemaker_enabled = true
   }
   default: {
     $rabbit_enabled = true
+    $pacemaker_enabled = true
   }
 }
 
@@ -30,7 +33,7 @@ $calculated_content = inline_template('
 amqp_hosts: <%= @amqp_hosts %>
 rabbit:
   enabled: <%= @rabbit_enabled %>
-  pacemaker: false
+  pacemaker: <%= @pacemaker_enabled %>
 ')
 
 ###################
