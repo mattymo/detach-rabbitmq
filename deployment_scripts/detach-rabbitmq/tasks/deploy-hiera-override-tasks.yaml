@@ -1,13 +1,3 @@
-- id: deploy-hiera-deep-merge
-  type: puppet
-  groups: [primary-controller, controller, rabbitmq-standalone]
-  requires: [hiera]
-  required_for: [globals]
-  parameters:
-    puppet_manifest: /etc/puppet/modules/osnailyfacter/modular/detach-rabbitmq/deploy-hiera-deep-merge.pp
-    puppet_modules: /etc/puppet/modules
-    timeout: 120
-
 - id: deploy-hiera-override-rabbitmq
   type: puppet
   groups: [primary-controller, controller, rabbitmq-standalone]
