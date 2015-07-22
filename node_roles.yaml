@@ -1,4 +1,4 @@
-rabbitmq:
+standalone-rabbitmq:
   name: "RabbitMQ"
   description: "Separated RabbitMQ from controller"
   has_primary: false                # whether has primary role or not
