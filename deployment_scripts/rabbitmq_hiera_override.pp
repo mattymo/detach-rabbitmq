@@ -1,5 +1,9 @@
 notice('MODULAR: detach-rabbitmq/deploy-hiera_override.pp')
 
+$hiera_dir = '/etc/hiera/override'
+$plugin_name = 'detach-rabbitmq'
+$plugin_yaml = "${plugin_name}.yaml"
+
 $detach_rabbitmq_plugin = hiera('detach-rabbitmq', undef)
 if ($detach_rabbitmq_plugin) {
   $rabbitmq_role = 'rabbitmq-standalone'
@@ -60,8 +64,14 @@ corosync_roles:
   file {'/etc/hiera/override':
     ensure  => directory,
   } ->
-  file { '/etc/hiera/override/plugins.yaml':
+  file { "${hiera_dir}/${plugin_yaml}":
     ensure  => file,
-    content => "${yaml_additional_config}\n${calculated_content}\n",
+    content => "${detach_rabbitmq_plugin['yaml_additional_config']}\n${calculated_content}\n",
+  }
+
+  file_line {"${plugin_name}_hiera_override":
+    path  => '/etc/hiera.yaml',
+    line  => "  - override/${plugin_name}",
+    after => '  - override/module/%{calling_module}',
   }
 }
