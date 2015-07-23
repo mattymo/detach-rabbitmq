@@ -6,7 +6,7 @@ $plugin_yaml = "${plugin_name}.yaml"
 
 $detach_rabbitmq_plugin = hiera('detach-rabbitmq', undef)
 if ($detach_rabbitmq_plugin) {
-  $rabbitmq_role = 'rabbitmq-standalone'
+  $rabbitmq_role = 'standalone-rabbitmq'
   $network_metadata = hiera_hash('network_metadata')
 #lint:ignore:80chars
   $rabbit_nodes = get_nodes_hash_by_roles($network_metadata, [ $rabbitmq_role ])
@@ -14,7 +14,6 @@ if ($detach_rabbitmq_plugin) {
   $yaml_additional_config = pick($detach_rabbitmq_plugin['yaml_additional_config'], {})
 #lint:endignore
   $amqp_port = hiera('amqp_port', '5673')
-  $nodes_hash = hiera('nodes')
   $rabbit_nodes_ips = values($rabbit_address_map)
   $rabbit_nodes_names = keys($rabbit_address_map)
   $settings_hash = parseyaml($yaml_additional_config)
