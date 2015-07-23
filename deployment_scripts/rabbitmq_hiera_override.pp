@@ -22,7 +22,8 @@ if ($detach_rabbitmq_plugin) {
     /rabbitmq/: {
       $corosync_roles = [ $rabbitmq_role ]
       $rabbit_enabled = true
-      $pacemaker_enabled = false
+      # Set to false for non-HA
+      $pacemaker_enabled = true
       $corosync_nodes = $rabbit_nodes
     }
     /controller/: {
@@ -33,7 +34,6 @@ if ($detach_rabbitmq_plugin) {
       $corosync_roles = ['primary-controller', 'controller']
       $rabbit_enabled = true
       $pacemaker_enabled = true
-      $corosync_nodes = hiera('controllers')
     }
   }
 
@@ -48,7 +48,7 @@ rabbit:
 <% if @corosync_nodes -%>
 <% require "yaml" -%>
 corosync_nodes:
-<%= YAML.dump(@corosync_nodes).sub(/--- *$/,"") %>?
+<%= YAML.dump(@corosync_nodes).sub(/--- *$/,"") %>
 <% end -%>
 <% if @corosync_roles -%>
 corosync_roles:

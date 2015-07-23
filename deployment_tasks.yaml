@@ -1,8 +1,8 @@
 - id: rabbitmq-hiera-override
   type: puppet
   groups: [primary-controller, controller, standalone-rabbitmq, cinder, cinder-vmware, compute, ceph-osd, zabbix-server, primary-mongo, mongo]
-  requires: [fuel_pkgs, hiera]
-  required_for: [globals]
+  requires: [fuel_pkgs, hiera, globals]
+  required_for: [deploy_end]
   parameters:
     puppet_manifest: "rabbitmq_hiera_override.pp"
     puppet_modules: "/etc/puppet/modules"
@@ -25,7 +25,7 @@
 - id: task-rabbitmq
   type: puppet
   role: [standalone-rabbitmq]
-  requires: [hosts, firewall]
+  requires: [hosts, firewall, globals, rabbitmq-hiera-override, cluster]
   required_for: [deploy_end, glance, openstack-network]
   parameters:
     puppet_manifest: /etc/puppet/modules/osnailyfacter/modular/rabbitmq/rabbitmq.pp
