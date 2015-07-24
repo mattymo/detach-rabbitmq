@@ -25,7 +25,7 @@
 - id: task-rabbitmq
   type: puppet
   role: [standalone-rabbitmq]
-  requires: [hosts, firewall, globals, rabbitmq-hiera-override, cluster]
+  requires: [hosts, firewall, globals, rabbitmq-hiera-override]
   required_for: [deploy_end, glance, openstack-network]
   parameters:
     puppet_manifest: /etc/puppet/modules/osnailyfacter/modular/rabbitmq/rabbitmq.pp

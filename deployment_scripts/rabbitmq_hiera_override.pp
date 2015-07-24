@@ -22,8 +22,8 @@ if ($detach_rabbitmq_plugin) {
     /rabbitmq/: {
       $corosync_roles = [ $rabbitmq_role ]
       $rabbit_enabled = true
-      # Set to false for non-HA
-      $pacemaker_enabled = true
+      # Set to true HA
+      $pacemaker_enabled = false
       $corosync_nodes = $rabbit_nodes
     }
     /controller/: {
