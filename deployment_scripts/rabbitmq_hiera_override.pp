@@ -1,15 +1,15 @@
-notice('MODULAR: detach-rabbitmq/deploy-hiera_override.pp')
+notice('MODULAR: detach-rabbitmq/rabbitmq_hiera_override.pp')
 
+$detach_rabbitmq_plugin = hiera('detach-rabbitmq', undef)
 $hiera_dir = '/etc/hiera/override'
 $plugin_name = 'detach-rabbitmq'
 $plugin_yaml = "${plugin_name}.yaml"
 
-$detach_rabbitmq_plugin = hiera('detach-rabbitmq', undef)
 if ($detach_rabbitmq_plugin) {
-  $rabbitmq_role = 'standalone-rabbitmq'
   $network_metadata = hiera_hash('network_metadata')
+  $rabbitmq_roles = [ 'standalone-rabbitmq' ]
+  $rabbit_nodes = get_nodes_hash_by_roles($network_metadata, $rabbitmq_roles)
 #lint:ignore:80chars
-  $rabbit_nodes = get_nodes_hash_by_roles($network_metadata, [ $rabbitmq_role ])
   $rabbit_address_map = get_node_to_ipaddr_map_by_network_role($rabbit_nodes, 'mgmt/messaging')
   $yaml_additional_config = pick($detach_rabbitmq_plugin['yaml_additional_config'], {})
 #lint:endignore
@@ -20,20 +20,18 @@ if ($detach_rabbitmq_plugin) {
 
   case hiera('role', 'none') {
     /rabbitmq/: {
-      $corosync_roles = [ $rabbitmq_role ]
       $rabbit_enabled = true
+      $corosync_roles = $rabbitmq_roles 
+      $deploy_vrouter = false
       # Set to true HA
-      $pacemaker_enabled = false
       $corosync_nodes = $rabbit_nodes
     }
     /controller/: {
       $rabbit_enabled = false
-      $pacemaker_enabled = true
     }
     default: {
-      $corosync_roles = ['primary-controller', 'controller']
+      $corosync_roles = $rabbitmq_roles
       $rabbit_enabled = true
-      $pacemaker_enabled = true
     }
   }
 
@@ -42,9 +40,8 @@ if ($detach_rabbitmq_plugin) {
 
   $calculated_content = inline_template('
 amqp_hosts: <%= @amqp_hosts %>
-rabbit:
+rabbit_hash:
   enabled: <%= @rabbit_enabled %>
-  pacemaker: <%= @pacemaker_enabled %>
 <% if @corosync_nodes -%>
 <% require "yaml" -%>
 corosync_nodes:
@@ -57,6 +54,7 @@ corosync_roles:
 %>  - <%= crole %>
 <% end -%>
 <% end -%>
+deploy_vrouter: <%= @deploy_vrouter %>
   ')
 
 ###################
@@ -68,9 +66,14 @@ corosync_roles:
     content => "${detach_rabbitmq_plugin['yaml_additional_config']}\n${calculated_content}\n",
   }
 
+  package {'ruby-deep-merge':
+    ensure  => 'installed',
+  }
+
   file_line {"${plugin_name}_hiera_override":
     path  => '/etc/hiera.yaml',
     line  => "  - override/${plugin_name}",
     after => '  - override/module/%{calling_module}',
   }
+
 }
