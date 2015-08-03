@@ -30,7 +30,6 @@ if ($detach_rabbitmq_plugin) {
       $rabbit_enabled = false
     }
     default: {
-      $corosync_roles = $rabbitmq_roles
       $rabbit_enabled = true
     }
   }
