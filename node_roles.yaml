@@ -10,5 +10,8 @@ standalone-rabbitmq:
     - compute
   limits:
     min: 1
-  update_required:
+  update_required:                  # Needed to update amqp_hosts
     - standalone-rabbitmq
+    - controller
+    - cinder
+    - ceph-osd
