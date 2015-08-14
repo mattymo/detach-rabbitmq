@@ -14,4 +14,5 @@ standalone-rabbitmq:
     - standalone-rabbitmq
     - controller
     - cinder
+    - compute
     - ceph-osd
