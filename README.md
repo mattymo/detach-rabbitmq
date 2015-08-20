@@ -1,4 +1,4 @@
-detach-rabbitmq
-============
+DEPRECATED
+==========
 
-Plugin description
+Please use https://github.com/stackforge/fuel-plugin-detach-rabbitmq
